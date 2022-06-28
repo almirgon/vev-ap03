@@ -77,5 +77,27 @@ public class AccountTest {
 
     }
 
+    @Test
+    void withdrawaldeactivatedaccount(){
+        Account account = new Account();
+        IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.withdrawl(50));
+        Assertions.assertEquals("Não é possivel sacar de uma conta desativada", exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "{index} => Cria uma conta com saldo inicial de {0} e faz o saques de ({1}, {2}, {3}, {4}, {5}, {6}), e atinge o limite de 5 saques para uma conta especial")
+    @CsvSource({"128.50,20.56,18,17,51.48,15,12.50", "273.41,18.52,130.42,11,5.85,52.36,16.17", "1078.0,52.30,67.18,527, 26.85,69.36,78.17"
+    })
+    void specialaccountreachedwithdrawallimit(double createValue, double withdrawl1, double withdrawl2, double withdrawl3, double withdrawl4, double withdrawl5, double withdrawl6){
+        Account account = new Account();
+        account.createAccount(createValue);
+        account.withdrawl(withdrawl1);
+        account.withdrawl(withdrawl2);
+        account.withdrawl(withdrawl3);
+        account.withdrawl(withdrawl4);
+        account.withdrawl(withdrawl5);
+        IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.withdrawl(withdrawl6));
+        Assertions.assertEquals("Limite de saques atingido", exception.getMessage());
+    }
+
 
 }
