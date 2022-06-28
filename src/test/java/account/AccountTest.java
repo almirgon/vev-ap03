@@ -33,6 +33,26 @@ public class AccountTest {
         Assertions.assertEquals("A conta já está desativada", exception.getMessage());
     }
 
+    @ParameterizedTest(name = "{index} => Cria uma conta com saldo inicial de {0}, faz saque de {1} e tenta desativar a conta com debito")
+    @CsvSource({"101, 102", "130, 1000", "200, 300", "147.0, 149.99", "775.86, 775.87"
+    })
+    void closeaccountwithdebit(double createValue, double withdrawlValue){
+        Account account = new Account();
+        account.createAccount(createValue);
+        account.withdrawl(withdrawlValue);
+        IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.closeAccount());
+        Assertions.assertEquals("Regularize sua situação", exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "{index} => Realiza depositos de {0} em uma conta desativada")
+    @CsvSource({"20","50", "0", "18", "25"
+    })
+    void depositdeactivatedaccount(double value){
+        Account account = new Account();
+        IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.deposit(value));
+        Assertions.assertEquals("Não é possivel depositar em uma conta desativada", exception.getMessage());
+    }
+
     @ParameterizedTest(name = "{index} => Cria a conta com valor inicial de {0} e faz depositos de {1} e {2} esperando um saldo igual a {3}")
     @CsvSource({"150, 15,10, 175", "10, 50,50, 110", "25,50,12, 87", "35,10,15,60"
     })
