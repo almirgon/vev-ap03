@@ -53,6 +53,7 @@ public class AccountTest {
         Assertions.assertEquals("Não é possivel depositar em uma conta desativada", exception.getMessage());
     }
 
+
     @ParameterizedTest(name = "{index} => Cria a conta com valor inicial de {0} e faz depositos de {1} e {2} esperando um saldo igual a {3}")
     @CsvSource({"150, 15,10, 175", "10, 50,50, 110", "25,50,12, 87", "35,10,15,60"
     })
@@ -97,6 +98,19 @@ public class AccountTest {
         account.withdrawl(withdrawl5);
         IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.withdrawl(withdrawl6));
         Assertions.assertEquals("Limite de saques atingido", exception.getMessage());
+    }
+
+    @ParameterizedTest(name = "{index} => Cria uma conta com valor {0} e faz o saque de ({1}, {2}, {3})")
+    @CsvSource({"68.50 ,0.50,68.00, 0.01", "57.80, 12.00,8.00,39.00", "25.0,20.0,4.5, 50", "13.15,3.00,10.00,80"
+    })
+    void withdrawalinsufficientbalance(double createValue, double withdrawl1, double withdrawl2, double withdrawl3){
+        Account account = new Account();
+        account.createAccount(createValue);
+        account.withdrawl(withdrawl1);
+        account.withdrawl(withdrawl2);
+        IllegalArgumentException exception =  Assertions.assertThrows(IllegalArgumentException.class, () -> account.withdrawl(withdrawl3));
+        Assertions.assertEquals("Saldo insuficiente", exception.getMessage());
+
     }
 
 
