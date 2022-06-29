@@ -2,7 +2,6 @@ package account;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Account {
 
     private boolean activeAccount;
@@ -13,21 +12,21 @@ public class Account {
 
     private List<Double> withdrawalHistory;
 
-    private double withdrawlLimit;
+    private int withdrawlLimit;
 
     public Account(){
         this.withdrawalHistory = new ArrayList<>();
     }
 
-    public double createAccount(double deposit){
+    public double createAccount(Double depositValue){
         setActiveAccount(true);
-        if(deposit >= 100){
+        if(depositValue >= 100){
             setSpecialClient(true);
             setWithdrawlLimit(5);
         }else{
             setWithdrawlLimit(2);
         }
-        setBalance(deposit);
+        this.deposit(depositValue);
         return getBalance();
     }
 
@@ -45,7 +44,7 @@ public class Account {
 
     }
 
-    public double deposit(double value){
+    public double deposit(Double value){
         if(isActiveAccount()){
             setBalance(getBalance() + value);
         }else{
@@ -54,7 +53,7 @@ public class Account {
         return getBalance();
     }
 
-    public double withdrawl(double value){
+    public double withdrawl(Double value){
         if(isActiveAccount()){
             if(!isSpecialClient() && value > getBalance()){
                 throw new IllegalArgumentException("Saldo insuficiente");
@@ -95,7 +94,7 @@ public class Account {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
@@ -104,16 +103,16 @@ public class Account {
         return withdrawalHistory;
     }
 
-    public void addWithdrawlTransaction(double withdrawl){
+    public void addWithdrawlTransaction(Double withdrawl){
         this.getWithdrawalHistory().add(withdrawl);
     }
 
 
-    public double getWithdrawlLimit() {
+    public int getWithdrawlLimit() {
         return withdrawlLimit;
     }
 
-    public void setWithdrawlLimit(double withdrawlLimit) {
+    public void setWithdrawlLimit(int withdrawlLimit) {
         this.withdrawlLimit = withdrawlLimit;
     }
 
